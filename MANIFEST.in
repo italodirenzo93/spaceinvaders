@@ -1,0 +1,2 @@
+include SpaceInvaders
+recursive-include spaceinvaders/data *
