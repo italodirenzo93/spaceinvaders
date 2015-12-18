@@ -1,0 +1,5 @@
+# Directories
+spaceinvaders/__pycache__/
+
+# File types
+*.pyc
