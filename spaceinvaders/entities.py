@@ -1,14 +1,15 @@
 import pygame
 import random
 
-from spaceinvaders import assets, SCREEN_WIDTH
+from spaceinvaders import assets
 from spaceinvaders.utils import Vec2
 	
 # Classes
 class Sprite(pygame.sprite.Sprite):
-	def __init__(self, image, x = 0, y = 0, origin_x = 0, origin_y = 0, scale_x = 0, scale_y = 0):
+	def __init__(self, image, tag, x = 0, y = 0, origin_x = 0, origin_y = 0, scale_x = 0, scale_y = 0):
 		super().__init__()
 		
+		self.tag = tag
 		self.scale = Vec2(scale_x, scale_y)
 		self.origin = Vec2(origin_x, origin_y)
 		
@@ -42,14 +43,13 @@ class Player(Sprite):
 	"""
 	# Constructor
 	def __init__(self, x, y):
-		super().__init__(assets.IMAGES['player_ship'], x, y, 18, 18, 36, 36)
+		super().__init__(assets.IMAGES['player_ship'], 'player', x, y, 18, 18, 36, 36)
 		self.move_speed = 250
-		#self.shot_manager = ShotManager()
 		self.shot_group = pygame.sprite.Group()
 		
 	def fire_shot(self):
 		position = self.get_position()
-		shot = Sprite(assets.IMAGES['laser_red'], position.x, position.y, 5, 15, 10, 30)
+		shot = Sprite(assets.IMAGES['laser_red'], 'laser_player', position.x, position.y, 5, 15, 10, 30)
 		self.shot_group.add(shot)
 	
 	# Override
@@ -62,11 +62,13 @@ class Player(Sprite):
 			self.rect.x += self.move_speed * delta
 			
 		# Detect screen bounds
+		screen_info = pygame.display.Info()
 		if self.rect.x <= 0:
 			self.rect.x = 0
-		if self.rect.x + self.rect.width >= SCREEN_WIDTH:
-			self.rect.x = SCREEN_WIDTH - self.rect.width
+		if self.rect.x + self.rect.width >= screen_info.current_w:
+			self.rect.x = screen_info.current_w - self.rect.width
 			
+		# Fire shots
 		for shot in self.shot_group:
 			shot.move(0, -600 * delta)
 			if shot.get_position().y < 0:

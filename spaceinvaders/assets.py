@@ -11,7 +11,8 @@ IMAGES = {
 }
 
 AUDIO = {
-
+	'laser1' : pygame.mixer.Sound(os.path.join(ASSETS_DIR, 'laser1.wav')),
+	'laser2' : pygame.mixer.Sound(os.path.join(ASSETS_DIR, 'laser2.wav')),
 }
 
 FONTS = {

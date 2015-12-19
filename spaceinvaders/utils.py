@@ -7,7 +7,7 @@ class Vec2(object):
 		return "( 'x' : {0}, 'y' : {1} )".format(self.x, self.y)
 		
 	def __str__(self):
-		return "Vec2( X : {0}, X : {1} )".format(self.x, self.y)
+		return "Vec2( X : {0}, Y : {1} )".format(self.x, self.y)
 		
 	def __eq__(self, other):
 		return self.x == other.x and self.y == other.y

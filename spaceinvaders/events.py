@@ -5,13 +5,6 @@ from spaceinvaders import assets, entities
 from spaceinvaders.utils import Vec2
 
 # Events
-def keyboard_callback(keycode, **kwargs):
-	if keycode == pygame.K_SPACE:
-		player = kwargs['player']
-		player.fire_shot()
-	else:
-		return
-
 def spawn_wave(pos_x, pos_y):
 	"""
 	Spawns a wave of enemies in a 5x3 pattern.
@@ -24,6 +17,7 @@ def spawn_wave(pos_x, pos_y):
 		for x in range(0, 5):
 			alien = entities.Sprite(
 				assets.IMAGES['alien'],
+				'alien',
 				pos_x + (scale_factor.x * x),
 				pos_y + (scale_factor.y * y),
 				0, 0,
@@ -31,3 +25,12 @@ def spawn_wave(pos_x, pos_y):
 			group.add(alien)
 			
 	return group
+	
+def keyboard_callback(keycode, **kwargs):
+	if keycode == pygame.K_SPACE:
+		kwargs['player'].fire_shot()
+		assets.AUDIO['laser1'].play()
+	elif keycode == pygame.K_i:
+		kwargs['waves'].append(spawn_wave(200, 0))
+	else:
+		return
