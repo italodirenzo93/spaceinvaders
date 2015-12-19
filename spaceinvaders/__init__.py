@@ -11,9 +11,7 @@ score = 0
 pygame.init()
 pygame.font.init()
 
-from spaceinvaders import assets
-from spaceinvaders import entities
-from spaceinvaders import events
+from spaceinvaders import assets, entities, events
 
 def start_game():
 	"""

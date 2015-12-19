@@ -2,49 +2,55 @@ import pygame
 import random
 
 from spaceinvaders import assets, SCREEN_WIDTH
-		
+from spaceinvaders.utils import Vec2
+	
 # Classes
-class Shot(pygame.sprite.Sprite):
-	def __init__(self, x = 0, y = 0):
+class Sprite(pygame.sprite.Sprite):
+	def __init__(self, image, x = 0, y = 0, origin_x = 0, origin_y = 0, scale_x = 0, scale_y = 0):
 		super().__init__()
-		self.image = pygame.transform.scale(assets.IMAGES['laser_red'], (10, 30))
-		self.rect = self.image.get_rect()
-		self.rect.x, self.rect.y = x - self.rect.width/2, y - self.rect.height/2
-	
-	def get_center(self):
-		return (self.rect.x + self.rect.width / 2, self.rect.y + self.rect.height / 2)
-
-class ShotManager(object):
-	shot_group = pygame.sprite.Group()
-	
-	def fire_shot(self, x, y):
-		s = Shot(x, y)
-		self.shot_group.add(s)
 		
+		self.scale = Vec2(scale_x, scale_y)
+		self.origin = Vec2(origin_x, origin_y)
+		
+		self.image = pygame.transform.scale(image, (self.scale.x, self.scale.y))
+		self.rect = self.image.get_rect()
+		self.rect.x = x - self.origin.x
+		self.rect.y = y - self.origin.y
+		
+	def get_position(self):
+		return Vec2(self.rect.x + self.origin.x, self.rect.y + self.origin.y)
+		
+	def set_position(self, x, y):
+		self.rect.x = x - self.origin.x
+		self.rect.y = y - self.origin.y
+	
+	def move(self, x, y):
+		self.rect.x += x
+		self.rect.y += y
+	
+	# Override
 	def update(self, delta):
-		for shot in self.shot_group:
-			shot.rect.y -= 600 * delta
-			if shot.rect.y + shot.rect.height < 0:
-				shot.kill()
-				print('Shot destroyed')
-
+		pass
+		
 	def draw(self, screen):
-		self.shot_group.draw(screen)
+		screen.blit(self.image, self.rect)
 
-class Player(pygame.sprite.Sprite):
+
+class Player(Sprite):
 	"""
 	Controls gameplay logic of the player spaceship.
 	"""
 	# Constructor
 	def __init__(self, x, y):
-		super().__init__()
-		self.image = pygame.transform.scale(assets.IMAGES['player_ship'], (36, 36))
-		self.rect = self.image.get_rect()
-		# Set origin point to center
-		self.rect.x, self.rect.y = x - self.rect.width/2, y - self.rect.height/2
-		
+		super().__init__(assets.IMAGES['player_ship'], x, y, 18, 18, 36, 36)
 		self.move_speed = 250
-		self.shot_manager = ShotManager()
+		#self.shot_manager = ShotManager()
+		self.shot_group = pygame.sprite.Group()
+		
+	def fire_shot(self):
+		position = self.get_position()
+		shot = Sprite(assets.IMAGES['laser_red'], position.x, position.y, 5, 15, 10, 30)
+		self.shot_group.add(shot)
 	
 	# Override
 	def update(self, delta):
@@ -61,27 +67,15 @@ class Player(pygame.sprite.Sprite):
 		if self.rect.x + self.rect.width >= SCREEN_WIDTH:
 			self.rect.x = SCREEN_WIDTH - self.rect.width
 			
-		# Draw
-		self.shot_manager.update(delta)
+		for shot in self.shot_group:
+			shot.move(0, -600 * delta)
+			if shot.get_position().y < 0:
+				shot.kill()
 	
 	def draw(self, screen):
-		self.shot_manager.draw(screen)
-		screen.blit(self.image, self.rect)
-
-
-class Alien(pygame.sprite.Sprite):
-	"""
-	Primary enemy.
-	"""
-	# Constructor
-	def __init__(self, x = 0, y = 0):
-		super().__init__()
-		self.image = pygame.transform.scale(assets.IMAGES['alien'], (48, 48))
-		self.rect = self.image.get_rect()
-		self.wait_time = 0
-		
-	def set_position(self, x, y):
-		self.rect.x, self.rect.y = x, y
+		for shot in self.shot_group:
+			shot.draw(screen)
+		super().draw(screen)
 
 
 class AlienGroup(pygame.sprite.Group):
@@ -96,8 +90,7 @@ class AlienGroup(pygame.sprite.Group):
 		self.wait_time = 0
 		
 	# Override
-	def update(self, *args):
-		delta = args[0]
+	def update(self, delta):
 		self.wait_time += delta
 		
 		if self.wait_time >= 2:	# move every 2 seconds
