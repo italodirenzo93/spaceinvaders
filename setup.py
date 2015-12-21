@@ -11,6 +11,5 @@ setup(
 	url = '',
 	packages = ['spaceinvaders'],
 	package_data = {'package': files},
-	scripts = ['SpaceInvaders.py'],
 	long_description = '',
 )

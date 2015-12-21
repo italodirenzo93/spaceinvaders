@@ -7,6 +7,8 @@ pygame.init()
 
 from spaceinvaders import assets, entities, events
 
+from spaceinvaders import starfield
+
 # Set up window
 screen = pygame.display.set_mode((800, 600), pygame.DOUBLEBUF | pygame.HWSURFACE)
 pygame.display.set_caption('Space Invaders')
@@ -33,20 +35,16 @@ while True:
 	
 	screen.fill((0, 0, 0))
 	
+	starfield.draw(screen)
+	
 	player.update(delta)
 	player.draw(screen)
 	
 	for wave in enemy_waves:
 		wave.update(delta)
 		wave.draw(screen)
-		
-		# Shoot down ze aliens
-		for alien in wave:
-			for shot in player.shot_group:
-				if alien.rect.contains(shot.rect):
-					alien.kill()
-					shot.kill()
-					score += 10
+		if len(pygame.sprite.groupcollide(player.shot_group, wave, True, True)) > 0:
+			score += 10
 		
 	text = assets.FONTS['main'].render('Score: {0}'.format(score), False, (255, 255, 255))
 	screen.blit(text, text.get_rect())
