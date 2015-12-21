@@ -10,7 +10,7 @@ from spaceinvaders import assets, entities, events
 from spaceinvaders import starfield
 
 # Set up window
-screen = pygame.display.set_mode((800, 600), pygame.DOUBLEBUF | pygame.HWSURFACE)
+screen = pygame.display.set_mode((1024, 720), pygame.DOUBLEBUF | pygame.HWSURFACE)
 pygame.display.set_caption('Space Invaders')
 pygame.display.set_icon(pygame.transform.scale(assets.IMAGES['alien'], (32, 32)))
 
@@ -18,8 +18,8 @@ clock = pygame.time.Clock()
 score = 0
 
 # Game objects
-player = entities.Player(200, screen.get_rect().height - 50)
-enemy_waves = [events.spawn_wave(200, 0)]
+player = entities.Player(screen.get_rect().width / 2, screen.get_rect().height - 50)
+enemy_waves = [events.spawn_wave(screen.get_rect().width / 2, 0)]
 
 # Game loop
 while True:
@@ -35,6 +35,7 @@ while True:
 	
 	screen.fill((0, 0, 0))
 	
+	starfield.update(delta)
 	starfield.draw(screen)
 	
 	player.update(delta)
