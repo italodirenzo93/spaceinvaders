@@ -7,8 +7,6 @@ pygame.init()
 
 from spaceinvaders import assets, entities, events
 
-from spaceinvaders import starfield
-
 # Set up window
 screen = pygame.display.set_mode((1024, 720), pygame.DOUBLEBUF | pygame.HWSURFACE)
 pygame.display.set_caption('Space Invaders')
@@ -18,7 +16,7 @@ clock = pygame.time.Clock()
 score = 0
 
 # Game objects
-player = entities.Player(screen.get_rect().width / 2, screen.get_rect().height - 50)
+from spaceinvaders import starfield, player
 enemy_waves = [events.spawn_wave(screen.get_rect().width / 2, 0)]
 
 # Game loop

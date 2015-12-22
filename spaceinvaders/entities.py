@@ -37,49 +37,6 @@ class Sprite(pygame.sprite.Sprite):
 		screen.blit(self.image, self.rect)
 
 
-class Player(Sprite):
-	"""
-	Controls gameplay logic of the player spaceship.
-	"""
-	# Constructor
-	def __init__(self, x, y):
-		super(Player, self).__init__(assets.IMAGES['player_ship'], 'player', x, y, 18, 18, 36, 36)
-		self.move_speed = 250
-		self.shot_group = pygame.sprite.Group()
-		
-	def fire_shot(self):
-		position = self.get_position()
-		shot = Sprite(assets.IMAGES['laser_red'], 'laser_player', position.x, position.y, 5, 15, 10, 30)
-		self.shot_group.add(shot)
-	
-	# Override
-	def update(self, delta):
-		keys_down = pygame.key.get_pressed()
-		
-		if keys_down[pygame.K_LEFT]:
-			self.rect.x -= self.move_speed * delta
-		if keys_down[pygame.K_RIGHT]:
-			self.rect.x += self.move_speed * delta
-			
-		# Detect screen bounds
-		screen_info = pygame.display.Info()
-		if self.rect.x <= 0:
-			self.rect.x = 0
-		if self.rect.x + self.rect.width >= screen_info.current_w:
-			self.rect.x = screen_info.current_w - self.rect.width
-			
-		# Fire shots
-		for shot in self.shot_group:
-			shot.move(0, -600 * delta)
-			if shot.get_position().y < 0:
-				shot.kill()
-	
-	def draw(self, screen):
-		for shot in self.shot_group:
-			shot.draw(screen)
-		super(Player, self).draw(screen)
-
-
 class AlienGroup(pygame.sprite.Group):
 	"""
 	Custom group for holding alien objects.
