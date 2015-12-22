@@ -7,7 +7,7 @@ from spaceinvaders.utils import Vec2
 # Classes
 class Sprite(pygame.sprite.Sprite):
 	def __init__(self, image, tag, x = 0, y = 0, origin_x = 0, origin_y = 0, scale_x = 0, scale_y = 0):
-		super().__init__()
+		super(Sprite, self).__init__()
 		
 		self.tag = tag
 		self.scale = Vec2(scale_x, scale_y)
@@ -43,7 +43,7 @@ class Player(Sprite):
 	"""
 	# Constructor
 	def __init__(self, x, y):
-		super().__init__(assets.IMAGES['player_ship'], 'player', x, y, 18, 18, 36, 36)
+		super(Player, self).__init__(assets.IMAGES['player_ship'], 'player', x, y, 18, 18, 36, 36)
 		self.move_speed = 250
 		self.shot_group = pygame.sprite.Group()
 		
@@ -77,7 +77,7 @@ class Player(Sprite):
 	def draw(self, screen):
 		for shot in self.shot_group:
 			shot.draw(screen)
-		super().draw(screen)
+		super(Player, self).draw(screen)
 
 
 class AlienGroup(pygame.sprite.Group):
@@ -88,7 +88,7 @@ class AlienGroup(pygame.sprite.Group):
 	"""
 	# Constructor
 	def __init__(self, *sprites):
-		super().__init__(*sprites)
+		super(AlienGroup, self).__init__(*sprites)
 		self.wait_time = 0
 		
 	# Override

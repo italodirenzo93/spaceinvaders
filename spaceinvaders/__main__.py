@@ -31,7 +31,7 @@ while True:
 		else:
 			continue
 			
-	delta = clock.tick(60) / 1000 # as seconds
+	delta = clock.tick(60) / 1000.0 # as seconds
 	
 	screen.fill((0, 0, 0))
 	
