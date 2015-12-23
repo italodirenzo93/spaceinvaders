@@ -8,12 +8,12 @@ screen_info = pygame.display.Info()
 
 MOVE_SPEED = 250
 
-player_sprite = Sprite(assets.IMAGES['player_ship'], 'player', screen_info.current_w / 2, screen_info.current_h - 50, 18, 18, 36, 36)
+player_sprite = Sprite(assets.IMAGES['player_ship'], screen_info.current_w / 2, screen_info.current_h - 50, 18, 18, 36, 36)
 shot_group = pygame.sprite.RenderPlain()
 
 def fire_shot():
 	position = player_sprite.get_position()
-	shot = Sprite(assets.IMAGES['laser_red'], 'laser_player', position.x, position.y, 5, 15, 10, 30)
+	shot = Sprite(assets.IMAGES['laser_red'], position.x, position.y, 5, 15, 10, 30)
 	shot_group.add(shot)
 
 def update(delta):

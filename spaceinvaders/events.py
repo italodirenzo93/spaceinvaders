@@ -1,7 +1,7 @@
 ﻿import pygame
 import sys
 
-from spaceinvaders import assets, entities
+from spaceinvaders import assets, entities, globals, player
 from spaceinvaders.utils import Vec2
 
 # Events
@@ -17,7 +17,6 @@ def spawn_wave(pos_x, pos_y):
 		for x in range(0, 5):
 			alien = entities.Sprite(
 				assets.IMAGES['alien'],
-				'alien',
 				pos_x + (scale_factor.x * x),
 				pos_y + (scale_factor.y * y),
 				0, 0,
@@ -25,12 +24,15 @@ def spawn_wave(pos_x, pos_y):
 			group.add(alien)
 			
 	return group
-	
-def keyboard_callback(keycode, **kwargs):
+
+def keyboard_callback(keycode):
 	if keycode == pygame.K_SPACE:
-		kwargs['player'].fire_shot()
-		assets.AUDIO['laser1'].play()
+		if not globals.is_paused:
+			player.fire_shot()
+			assets.AUDIO['laser1'].play()
 	elif keycode == pygame.K_i:
-		kwargs['waves'].append(spawn_wave(200, 0))
+		globals.enemy_waves.append(spawn_wave(200, 0))
+	elif keycode == pygame.K_RETURN:
+		globals.is_paused = not globals.is_paused
 	else:
 		return

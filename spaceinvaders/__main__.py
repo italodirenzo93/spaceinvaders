@@ -5,19 +5,20 @@ import sys
 pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=512)
 pygame.init()
 
-from spaceinvaders import assets, entities, events
-
 # Set up window
 screen = pygame.display.set_mode((1024, 720), pygame.DOUBLEBUF | pygame.HWSURFACE)
+
+from spaceinvaders import assets, entities, events
+
 pygame.display.set_caption('Space Invaders')
 pygame.display.set_icon(pygame.transform.scale(assets.IMAGES['alien'], (32, 32)))
 
-clock = pygame.time.Clock()
-score = 0
-
 # Game objects
+from spaceinvaders import globals
 from spaceinvaders import starfield, player
-enemy_waves = [events.spawn_wave(screen.get_rect().width / 2, 0)]
+
+globals.enemy_waves.append(events.spawn_wave(screen.get_rect().width/2 - 50, 0))
+
 
 # Game loop
 while True:
@@ -25,27 +26,39 @@ while True:
 		if ev.type == pygame.QUIT:
 			sys.exit()
 		elif ev.type == pygame.KEYDOWN:
-			events.keyboard_callback(ev.key, player = player, waves = enemy_waves)
+			events.keyboard_callback(ev.key)
 		else:
 			continue
 			
-	delta = clock.tick(60) / 1000.0 # as seconds
+	delta = globals.clock.tick(60) / 1000.0 # as seconds
 	
+	# Updates
+	if not globals.is_paused:
+		starfield.update(delta)
+		player.update(delta)
+		for wave in globals.enemy_waves:
+			wave.update(delta)
+			if len(pygame.sprite.groupcollide(player.shot_group, wave, True, True)) > 0:
+				globals.score += 10
+	
+	# Draws
 	screen.fill((0, 0, 0))
 	
-	starfield.update(delta)
 	starfield.draw(screen)
-	
-	player.update(delta)
 	player.draw(screen)
 	
-	for wave in enemy_waves:
-		wave.update(delta)
+	for wave in globals.enemy_waves:
 		wave.draw(screen)
-		if len(pygame.sprite.groupcollide(player.shot_group, wave, True, True)) > 0:
-			score += 10
 		
-	text = assets.FONTS['main'].render('Score: {0}'.format(score), False, (255, 255, 255))
+	text = assets.FONTS['main'].render('Score: {0}'.format(globals.score), False, (255, 255, 255))
 	screen.blit(text, text.get_rect())
 	
+	if globals.is_paused:
+		pause_text = assets.FONTS['main'].render('PAUSED', False, (255, 255, 255))
+		pause_dst = pause_text.get_rect()
+		pause_dst.x = screen.get_rect().width / 2 - pause_dst.width / 2
+		pause_dst.y = screen.get_rect().height / 2 - pause_dst.height / 2
+		screen.blit(pause_text, pause_dst)
+	
+	# Draw buffer to screen
 	pygame.display.flip()
