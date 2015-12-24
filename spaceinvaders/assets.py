@@ -16,5 +16,5 @@ AUDIO = {
 }
 
 FONTS = {
-	'main' : pygame.font.Font(os.path.join(ASSETS_DIR, 'Munro.ttf'), 26),
+	'main' : pygame.font.Font(os.path.join(ASSETS_DIR, 'Munro.ttf'), 32),
 }

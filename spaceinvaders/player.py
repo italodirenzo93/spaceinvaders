@@ -20,9 +20,9 @@ def update(delta):
 	keys_down = pygame.key.get_pressed()
 		
 	if keys_down[pygame.K_LEFT]:
-		player_sprite.rect.x -= MOVE_SPEED * delta
+		player_sprite.move(-MOVE_SPEED * delta, 0)
 	if keys_down[pygame.K_RIGHT]:
-		player_sprite.rect.x += MOVE_SPEED * delta
+		player_sprite.move(MOVE_SPEED * delta, 0)
 		
 	# Detect screen bounds
 	if player_sprite.rect.x <= 0:

@@ -5,8 +5,21 @@ import sys
 pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=512)
 pygame.init()
 
+video_settings = {
+	'res' : (1024, 720),
+	'flags' : pygame.HWSURFACE | pygame.DOUBLEBUF
+}
+
+# Parse command line
+if len(sys.argv) > 1:
+	if sys.argv[1] == '-f':
+		video_settings['flags'] |= pygame.FULLSCREEN
+		screen_info = pygame.display.Info()
+		video_settings['res'] = (screen_info.current_w, screen_info.current_h)
+
 # Set up window
-screen = pygame.display.set_mode((1024, 720), pygame.DOUBLEBUF | pygame.HWSURFACE)
+#screen = pygame.display.set_mode((1024, 768), pygame.DOUBLEBUF | pygame.HWSURFACE)
+screen = pygame.display.set_mode(video_settings['res'], video_settings['flags'])
 
 from spaceinvaders import assets, entities, events
 

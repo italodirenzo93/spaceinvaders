@@ -34,5 +34,7 @@ def keyboard_callback(keycode):
 		globals.enemy_waves.append(spawn_wave(200, 0))
 	elif keycode == pygame.K_RETURN:
 		globals.is_paused = not globals.is_paused
+	elif keycode == pygame.K_ESCAPE:
+		sys.exit()
 	else:
 		return
