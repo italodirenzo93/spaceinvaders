@@ -18,13 +18,13 @@ if len(sys.argv) > 1:
 		video_settings['res'] = (screen_info.current_w, screen_info.current_h)
 
 # Set up window
-#screen = pygame.display.set_mode((1024, 768), pygame.DOUBLEBUF | pygame.HWSURFACE)
 screen = pygame.display.set_mode(video_settings['res'], video_settings['flags'])
 
 from spaceinvaders import assets, entities, events
 
 pygame.display.set_caption('Space Invaders')
 pygame.display.set_icon(pygame.transform.scale(assets.IMAGES['alien'], (32, 32)))
+pygame.mouse.set_visible(False)
 
 # Game objects
 from spaceinvaders import globals
