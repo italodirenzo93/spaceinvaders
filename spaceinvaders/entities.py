@@ -51,7 +51,7 @@ class AlienGroup(pygame.sprite.Group):
 	def update(self, delta):
 		self.wait_time += delta
 		
-		if self.wait_time >= 2:	# move every 2 seconds
+		if self.wait_time >= 1:	# move every second
 			direction_chance = random.randrange(0, 20)
 			
 			for alien in self:

@@ -1,5 +1,6 @@
 import pygame
 import sys
+import random
 
 # Initialize
 pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=512)
@@ -30,8 +31,7 @@ pygame.mouse.set_visible(False)
 from spaceinvaders import globals
 from spaceinvaders import starfield, player
 
-globals.enemy_waves.append(events.spawn_wave(screen.get_rect().width/2 - 50, 0))
-
+ENEMY_SPAWN_CHANCE = 0.002
 
 # Game loop
 while True:
@@ -49,13 +49,17 @@ while True:
 	if not globals.is_paused:
 		starfield.update(delta)
 		player.update(delta)
+		
+		if random.random() < ENEMY_SPAWN_CHANCE:
+			globals.enemy_waves.append(events.spawn_wave(random.randrange(screen.get_rect().width - 300), 0))
+		
 		for wave in globals.enemy_waves:
 			wave.update(delta)
 			if len(pygame.sprite.groupcollide(player.shot_group, wave, True, True)) > 0:
 				globals.score += 10
 			
 			for enemy in wave:
-				if events.is_colliding(player.player_sprite, enemy):
+				if events.is_colliding(player.player_sprite, enemy) or enemy.get_position().y > screen.get_rect().height:
 					player.dead = True
 	
 	# Draws
