@@ -38,3 +38,6 @@ def keyboard_callback(keycode):
 		sys.exit()
 	else:
 		return
+		
+def is_colliding(a, b):
+	return a.rect.colliderect(b.rect)

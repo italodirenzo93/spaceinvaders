@@ -6,7 +6,7 @@ pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=512)
 pygame.init()
 
 video_settings = {
-	'res' : (1024, 720),
+	'res' : (800, 600),
 	'flags' : pygame.HWSURFACE | pygame.DOUBLEBUF
 }
 
@@ -53,6 +53,10 @@ while True:
 			wave.update(delta)
 			if len(pygame.sprite.groupcollide(player.shot_group, wave, True, True)) > 0:
 				globals.score += 10
+			
+			for enemy in wave:
+				if events.is_colliding(player.player_sprite, enemy):
+					player.dead = True
 	
 	# Draws
 	screen.fill((0, 0, 0))
@@ -65,6 +69,13 @@ while True:
 		
 	text = assets.FONTS['main'].render('Score: {0}'.format(globals.score), False, (255, 255, 255))
 	screen.blit(text, text.get_rect())
+	
+	if player.dead:
+		gameover_text = assets.FONTS['main'].render('GAME OVER', False, (255, 255, 255))
+		gameover_dst = gameover_text.get_rect()
+		gameover_dst.x = screen.get_rect().width / 2 - gameover_dst.width / 2
+		gameover_dst.y = screen.get_rect().height / 2 - gameover_dst.height / 2
+		screen.blit(gameover_text, gameover_dst)
 	
 	if globals.is_paused:
 		pause_text = assets.FONTS['main'].render('PAUSED', False, (255, 255, 255))
