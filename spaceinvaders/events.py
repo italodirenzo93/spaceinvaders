@@ -30,8 +30,6 @@ def keyboard_callback(keycode):
 		if not globals.is_paused:
 			player.fire_shot()
 			assets.AUDIO['laser1'].play()
-	elif keycode == pygame.K_i:
-		globals.enemy_waves.append(spawn_wave(200, 0))
 	elif keycode == pygame.K_RETURN:
 		globals.is_paused = not globals.is_paused
 	elif keycode == pygame.K_ESCAPE:
