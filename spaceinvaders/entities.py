@@ -6,7 +6,7 @@ from spaceinvaders.utils import Vec2
 	
 # Classes
 class Sprite(pygame.sprite.Sprite):
-	def __init__(self, image, x = 0, y = 0, origin_x = 0, origin_y = 0, scale_x = 0, scale_y = 0):
+	def __init__(self, image, x = 0, y = 0, origin_x = 0, origin_y = 0, scale_x = 1, scale_y = 1):
 		super(Sprite, self).__init__()
 		
 		self.scale = Vec2(scale_x, scale_y)

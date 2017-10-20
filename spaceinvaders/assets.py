@@ -8,6 +8,7 @@ IMAGES = {
 	'alien' : pygame.image.load(os.path.join(ASSETS_DIR, 'Space_Invaders_Alien.png')),
 	'player_ship' : pygame.image.load(os.path.join(ASSETS_DIR, 'spaceship.png')),
 	'laser_red' : pygame.image.load(os.path.join(ASSETS_DIR, 'laser_red.png')),
+	'starfield': pygame.image.load(os.path.join(ASSETS_DIR, 'Starfield.png'))
 }
 
 AUDIO = {
